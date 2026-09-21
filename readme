@@ -1,0 +1,9 @@
+TR
+1. icons.zip klasörünü zip ten çıkartın
+2. direkt localde index.html dosyasını açıp çalıştırabilirsiniz
+3. telefondada kullanmak istiyorsanız app.netlify sitesinden ücretsiz host verip hem telefon hem bilgisayarda kullanabilirsiniz
+
+ENG
+1. Unzip the icons.zip file.
+2. To try it on your computer, just open index.html in your browser.
+3. To use it on your phone too, host it for free on Netlify (app.netlify.com/drop) and open the same link on both your phone and your computer.
