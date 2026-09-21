@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Manga Koleksiyonum</title>
+  <meta name="description" content="Manga koleksiyonunu takip et: ciltlerini işaretle, okuma durumunu tut, istek listeni yönet.">
+  <meta name="theme-color" content="#0f1115">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Mangalarım">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="logo" href="./" aria-label="Manga Koleksiyonum">
+        <img src="icons/icon.svg" alt="" width="32" height="32">
+        <span>Mangalarım</span>
+      </a>
+
+      <nav class="tabs" aria-label="Bölümler">
+        <button class="tab" data-tab="kesfet" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <span>Keşfet</span>
+        </button>
+        <button class="tab" data-tab="koleksiyon" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          <span>Koleksiyonum</span><em class="count" id="count-koleksiyon">0</em>
+        </button>
+        <button class="tab" data-tab="istek" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span>İstek Listesi</span><em class="count" id="count-istek">0</em>
+        </button>
+      </nav>
+
+      <div class="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="search" type="search" placeholder="Manga ara…" autocomplete="off" enterkeyhint="search" aria-label="Ara">
+      </div>
+
+      <button class="icon-btn" id="open-settings" type="button" aria-label="Yedekle ve ayarlar" title="Yedekle ve ayarlar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section id="view-kesfet" class="view">
+      <div class="toolbar">
+        <label>Tür
+          <select id="genre"></select>
+        </label>
+        <label>Sırala
+          <select id="sort"></select>
+        </label>
+        <button class="btn small" type="button" data-manual>+ Elle manga ekle</button>
+      </div>
+      <div class="grid" id="grid-kesfet"></div>
+      <div class="status" id="status-kesfet" aria-live="polite"></div>
+      <div id="sentinel" aria-hidden="true"></div>
+    </section>
+
+    <section id="view-koleksiyon" class="view" hidden>
+      <div class="banner" id="backup-banner" role="alert" hidden></div>
+      <div class="summary" id="summary-koleksiyon"></div>
+      <div class="toolbar">
+        <label>Durum
+          <select id="filter-status"></select>
+        </label>
+        <label>Sırala
+          <select id="sort-koleksiyon"></select>
+        </label>
+        <button class="btn small" type="button" data-manual>+ Elle manga ekle</button>
+      </div>
+      <div class="grid" id="grid-koleksiyon"></div>
+    </section>
+
+    <section id="view-istek" class="view" hidden>
+      <div class="summary" id="summary-istek"></div>
+      <div class="toolbar">
+        <label>Sırala
+          <select id="sort-istek"></select>
+        </label>
+        <button class="btn small" type="button" data-manual>+ Elle manga ekle</button>
+      </div>
+      <div class="grid" id="grid-istek"></div>
+    </section>
+  </main>
+
+  <dialog id="detail" aria-label="Manga ayrıntısı">
+    <button class="close" type="button" data-close aria-label="Kapat">×</button>
+    <div id="detail-body"></div>
+  </dialog>
+
+  <dialog id="manual" aria-label="Elle manga ekle">
+    <button class="close" type="button" data-close aria-label="Kapat">×</button>
+    <form class="settings-body" id="manual-form">
+      <h2 id="manual-title">Elle manga ekle</h2>
+      <p class="muted" id="manual-intro">Aradığın manga hiçbir kaynakta yoksa kendin ekleyebilirsin. Kapak fotoğrafını eklemek için mangayı ekledikten sonra açılan sayfada “Kapak ekle” düğmesini kullan.</p>
+      <label class="fld">Manga adı
+        <input name="title" required maxlength="200" autocomplete="off">
+      </label>
+      <label class="fld">Toplam cilt sayısı <span class="muted small">(biliyorsan)</span>
+        <input name="volumes" type="number" min="1" max="1000" inputmode="numeric">
+      </label>
+      <div class="row" data-when="add">
+        <button class="btn primary" type="submit" value="koleksiyon">Koleksiyonuma ekle</button>
+        <button class="btn" type="submit" value="istek">İstek listesine ekle</button>
+      </div>
+      <div class="row" data-when="edit" hidden>
+        <button class="btn primary" type="submit" value="kaydet">Kaydet</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="settings" aria-label="Yedekle ve ayarlar">
+    <button class="close" type="button" data-close aria-label="Kapat">×</button>
+    <div class="settings-body">
+      <h2>Yedekle ve aktar</h2>
+      <p class="muted">Koleksiyonun bu cihazın tarayıcısında saklanır. Yedek dosyası kapaklarını, fiyatlarını ve cilt bilgilerini de içerir. PC ile telefon arasında taşımak için dışa aktar, diğer cihazda içe aktar.</p>
+      <p class="small" id="backup-info"></p>
+      <div class="row">
+        <button class="btn primary" id="export" type="button">Dışa aktar (.json)</button>
+        <button class="btn" id="share-backup" type="button" hidden>Paylaş / Drive’a kaydet</button>
+        <label class="btn">
+          İçe aktar
+          <input id="import" type="file" accept="application/json,.json" hidden>
+        </label>
+      </div>
+      <p class="muted small">İçe aktarma mevcut koleksiyonla birleştirir; aynı mangada dosyadaki bilgi geçerli olur.</p>
+      <hr>
+      <button class="btn danger" id="wipe" type="button">Tüm verileri sil</button>
+      <p class="muted small">Veriler AniList üzerinden gelir. Bu uygulama AniList ile bağlantılı değildir.</p>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
